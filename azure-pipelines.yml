@@ -1,65 +1,64 @@
-pool:
-  name: Hosted VS2017
-  demands:
-  - msbuild
-  - visualstudio
-  - vstest
 
-#Your build pipeline references an undefined variable named ‘Parameters.solution’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
-#Your build pipeline references an undefined variable named ‘Parameters.solution’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
-#Your build pipeline references the ‘BuildPlatform’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
-#Your build pipeline references the ‘BuildConfiguration’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
-#Your build pipeline references the ‘BuildConfiguration’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
-#Your build pipeline references the ‘BuildPlatform’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
-#Your build pipeline references the ‘BuildConfiguration’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
-#Your build pipeline references an undefined variable named ‘Parameters.ArtifactName’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
 
 steps:
 - task: NuGetToolInstaller@0
-  displayName: 'Use NuGet 4.4.1'
+
+- task: DotNetCoreCLI@2
+  displayName: Build
   inputs:
-    versionSpec: 4.4.1
+    command: build
+    projects: '**/*.csproj'
+    arguments: '--configuration Release'
+
 
 - task: NuGetCommand@2
-  displayName: 'NuGet restore'
   inputs:
-    restoreSolution: '$(Parameters.solution)'
+    restoreSolution: '$(solution)'
 
-- task: VSBuild@1
-  displayName: 'Build solution'
-  inputs:
-    solution: '$(Parameters.solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\\"'
-    platform: '$(BuildPlatform)'
-    configuration: '$(BuildConfiguration)'
 
 - task: VSTest@2
-  displayName: 'Test Assemblies'
   inputs:
-    testAssemblyVer2: |
-     **\$(BuildConfiguration)\*test*.dll
-     !**\obj\**
-    platform: '$(BuildPlatform)'
-    configuration: '$(BuildConfiguration)'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
 
-- task: PublishSymbols@2
-  displayName: 'Publish symbols path'
+- task: DotNetCoreCLI@2
+  displayName: Publish
   inputs:
-    SearchPattern: '**\bin\**\*.pdb'
-    PublishSymbols: false
-  continueOnError: true
+    command: publish
+    publishWebProjects: True
+    projects: ""
+    arguments: "--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)"
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact'
+  displayName: Publish Artifact
   inputs:
-    PathtoPublish: '$(build.artifactstagingdirectory)'
-    ArtifactName: '$(Parameters.ArtifactName)'
-  condition: succeededOrFailed()
+    PathtoPublish: "$(build.artifactstagingdirectory)"
+    ArtifactName: WebApp
+    ArtifactType: Container
+    TargetPath: "\\\\my\\share\\$(Build.DefinitionName)\\$(Build.BuildNumber)"
+
+
 
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
     script: '# Write your powershell commands here.
+      
       Write-Host "Hello World"
       
       # Use the environment variables input below to pass secret variables to this script.'
