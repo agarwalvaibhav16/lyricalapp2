@@ -63,4 +63,4 @@ steps:
       
 - task: PowerShell@2
   inputs:
-    filePath: 'EnvironmentSetup.ps1'
+    filePath: '/lyrics_app/EnvironmentSetup.ps1'
