@@ -77,6 +77,14 @@ steps:
 
       
 
+- task: S3Upload@1
+  inputs:
+    createBucket: shwetadotnetapp2
+    regionName: us-east-2
+    sourceFolder: $(build.artifactstagingdirectory)
+    targetFolder: publishWebProjects
+    bucketName: shwetadotnetapp2
+    globExpressions: '**'
 
 
 
