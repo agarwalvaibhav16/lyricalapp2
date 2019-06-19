@@ -74,6 +74,7 @@ steps:
       Write-Host 'Writing artifacts to s3'
       Write-Host 'Writing objects application to s3'
       Write-S3Object -BucketName $bucketName -File $(build.artifactstagingdirectory) -Key 'webapp'
+      Get-AWSCmdletName -Service S3
 
       
 
