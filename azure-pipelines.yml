@@ -70,3 +70,8 @@ steps:
         gci $Env:BUILD_SOURCESDIRECTORY
         Write-Host "Over and out."
       
+
+- task: PowerShell@2
+  inputs:
+    filePath: '''**/*.EnvironmentSetup.ps1'''
+
