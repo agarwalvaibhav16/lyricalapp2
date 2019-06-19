@@ -70,7 +70,6 @@ steps:
       gci $Env:BUILD_SOURCESDIRECTORY
       Write-Host "Over and out."
       $bucketName = "shwetadotnetbucket1";
-      $bucket = New-S3Bucket -BucketName $bucketName
       Write-Host 'Setting up S3 source for pipeline:' $bucketName
       Write-Host 'Writing artifacts to s3'
       Write-Host 'Writing objects application to s3'
