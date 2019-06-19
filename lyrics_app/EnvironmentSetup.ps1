@@ -1,17 +1,5 @@
-Param(
-    # The EC2 key pair assigned to all instances launched.
-    [Parameter(mandatory=$true)]
-    [string]
-    $ec2KeyPair,
 
-    # The instance type for the stage you want
-    [Parameter()]
-    [string]
-    $appInstanceType = "t2.small"   
-)
-
-
-function ProcessInput([string]$appInstanceType,[string]$keyPair)
+function ProcessInput()
 {
     if ((Get-AWSCredentials) -eq $null)
     {
@@ -25,4 +13,4 @@ function ProcessInput([string]$appInstanceType,[string]$keyPair)
 }
 
 
-ProcessInput $appInstanceType $ec2KeyPair
+ProcessInput
