@@ -53,12 +53,11 @@ steps:
     TargetPath: "\\\\my\\share\\$(Build.DefinitionName)\\$(Build.BuildNumber)"
 
 
-
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
-    script: '# Write your powershell commands here.
+    script: 
+        Write-Host "Hello World"
+        Set-AWSCredential -AccessKey AKIAILJKYJIJEUC3NWVA  -SecretKey 9bQA6aYgalwV4c3LiRPAskRSqBII0Vh9xCfezqRD
+        Set-DefaultAWSRegion -Region us-west-1
       
-      Write-Host "Hello World"
-      Set-AWSCredential -AccessKey AKIAILJKYJIJEUC3NWVA  -SecretKey 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
-      Set-DefaultAWSRegion -Region us-west-1
