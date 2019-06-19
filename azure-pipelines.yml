@@ -80,6 +80,7 @@ steps:
 - task: S3Upload@1
   inputs:
     createBucket: true
+    kmsMasterKeyId: 3a219265-181c-4ed2-9a51-75a7f308f0d5 
     regionName: us-east-2
     sourceFolder: $(build.artifactstagingdirectory)
     targetFolder: publishWebProjects
