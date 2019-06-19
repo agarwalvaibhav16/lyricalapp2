@@ -56,3 +56,10 @@ steps:
     ArtifactName: '$(Parameters.ArtifactName)'
   condition: succeededOrFailed()
 
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: '# Write your powershell commands here.
+      Write-Host "Hello World"
+      
+      # Use the environment variables input below to pass secret variables to this script.'
