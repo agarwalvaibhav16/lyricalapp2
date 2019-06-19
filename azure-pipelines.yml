@@ -83,7 +83,7 @@ steps:
     regionName: us-east-2
     sourceFolder: $(build.artifactstagingdirectory)
     targetFolder: publishWebProjects
-    bucketName: shwetadotnetapp2
+    bucketName: shwetadotnetapp3
     globExpressions: '**'
 
 
