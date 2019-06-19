@@ -62,5 +62,8 @@ steps:
       Write-Host "Hello World"
       Set-AWSCredential -AccessKey AKIAILJKYJIJEUC3NWVA  -SecretKey 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
       Set-DefaultAWSRegion -Region us-west-1
+      - task: PowerShell@2
+        inputs:
+          filePath: './EnvironmentSetup.ps1'
       
       # Use the environment variables input below to pass secret variables to this script.'
