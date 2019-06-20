@@ -50,7 +50,7 @@ steps:
     regionName: 'us-east-2'
     scriptType: 'inline'
     inlineScript: 'aws s3 ls s3://shwetabucket3
-      aws s3 cp myfolder s3://shwetabucket3/webapps --recursive'
+      aws s3 cp $build.artifactstagingdirectory s3://shwetabucket3/webapps --recursive'
 
 
 - task: PublishBuildArtifacts@1
@@ -63,15 +63,6 @@ steps:
 
 
       
-
-- task: S3Upload@1
-  inputs:
-    regionName: us-east-2
-    awsCredentials: 3a219265-181c-4ed2-9a51-75a7f308f0d5
-    sourceFolder: $(build.artifactstagingdirectory)
-    targetFolder: publishWebProjects
-    bucketName: shwetadotnetapp3
-    globExpressions: '**'
 
 
 
