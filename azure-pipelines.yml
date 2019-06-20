@@ -44,6 +44,15 @@ steps:
     projects: ""
     arguments: "--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)"
 
+- task: AWSShellScript@1
+  inputs:
+    awsCredentials: 'aws_connection'
+    regionName: 'us-east-2'
+    scriptType: 'inline'
+    inlineScript: 'aws s3 ls s3://shwetabucket3
+      aws s3 cp myfolder s3://shwetabucket3/webapps --recursive'
+
+
 - task: PublishBuildArtifacts@1
   displayName: Publish Artifact
   inputs:
@@ -52,28 +61,6 @@ steps:
     ArtifactType: Container
     TargetPath: "\\\\my\\share\\$(Build.DefinitionName)\\$(Build.BuildNumber)"
 
-
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: 
-      Write-Host "Hello World"
-      Set-DefaultAWSRegion -Region us-east-1
-      Write-Host "Hello World from $Env:AGENT_NAME."
-      Write-Host "My ID is $Env:AGENT_ID."
-      Write-Host "AGENT_WORKFOLDER contents:"
-      gci $Env:AGENT_WORKFOLDER
-      Write-Host "AGENT_BUILDDIRECTORY contents:"
-      gci $Env:AGENT_BUILDDIRECTORY
-      Write-Host "BUILD_SOURCESDIRECTORY contents:"
-      gci $Env:BUILD_SOURCESDIRECTORY
-      Write-Host "Over and out."
-      $bucketName = "shwetadotnetbucket1";
-      Write-Host 'Setting up S3 source for pipeline:' $bucketName
-      Write-Host 'Writing artifacts to s3'
-      Write-Host 'Writing objects application to s3'
-      Write-S3Object -BucketName $bucketName -File $(build.artifactstagingdirectory) -Key 'webapp'
-      Get-AWSCmdletName -Service S3
 
       
 
@@ -85,6 +72,15 @@ steps:
     targetFolder: publishWebProjects
     bucketName: shwetadotnetapp3
     globExpressions: '**'
+
+
+
+
+
+
+
+
+
 
 
 
